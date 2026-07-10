@@ -1,0 +1,72 @@
+/* Weekly Recap Styles */
+
+.recap-header {
+  text-align: center;
+  margin: var(--space-xl) 0;
+}
+
+.recap-title {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-extrabold);
+  background: linear-gradient(135deg, var(--color-accent-dark), var(--color-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.recap-subtitle {
+  font-size: var(--fs-md);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.recap-mascot {
+  margin: var(--space-2xl) 0;
+}
+
+.recap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.recap-summary {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  border: 1px solid var(--color-border-light);
+}
+
+.recap-stat-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3xl);
+}
+
+.recap-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.recap-stat-num {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-extrabold);
+  color: var(--color-primary);
+}
+
+.recap-stat-label {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--fw-medium);
+}
+
+@media (max-width: 768px) {
+  .recap-stat-row {
+    gap: var(--space-xl);
+  }
+}

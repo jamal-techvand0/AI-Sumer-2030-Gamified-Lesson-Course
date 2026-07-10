@@ -1,0 +1,53 @@
+/* Step Walkthrough Styles */
+
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.step-card {
+  display: flex;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+  transition: all var(--transition-base);
+}
+
+.step-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateX(4px);
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.step-description {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-relaxed);
+}

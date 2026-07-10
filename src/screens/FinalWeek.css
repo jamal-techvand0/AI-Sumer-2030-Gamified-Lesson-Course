@@ -1,0 +1,298 @@
+/* Final Week Screens Styles */
+
+.fw-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0 var(--space-2xl);
+}
+
+.fw-day-badge {
+  padding: var(--space-sm) var(--space-lg);
+  color: var(--color-text);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.fw-title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-extrabold);
+}
+
+.fw-subtitle {
+  font-size: var(--fs-md);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.fw-content {
+  margin-top: var(--space-2xl);
+}
+
+.fw-section-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--space-md);
+}
+
+.fw-description {
+  font-size: var(--fs-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+  line-height: var(--lh-relaxed);
+}
+
+.fw-complete-area {
+  text-align: center;
+  padding: var(--space-3xl) 0;
+}
+
+/* --- Day 17: Storyboard --- */
+.scene-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.scene-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-light);
+  position: relative;
+}
+
+.scene-number {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  background: var(--color-bg-warm);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-secondary);
+}
+
+.scene-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.scene-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.scene-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-secondary);
+}
+
+.scene-remove {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-border-light);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-sm);
+  transition: all var(--transition-base);
+}
+
+.scene-remove:hover {
+  background: var(--color-error);
+  color: white;
+}
+
+.add-scene-btn {
+  width: 100%;
+  border-style: dashed;
+  border-width: 2px;
+  border-color: var(--color-secondary);
+  background: transparent;
+  color: var(--color-secondary-dark);
+}
+
+.add-scene-btn:hover {
+  background: rgba(78, 205, 196, 0.08);
+}
+
+/* --- Day 18: Checklist --- */
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.checklist-content {
+  flex: 1;
+}
+
+.checklist-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.checklist-emoji {
+  font-size: var(--fs-lg);
+}
+
+.checklist-label {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
+  transition: all var(--transition-base);
+}
+
+.checklist-label.checked-text {
+  text-decoration: line-through;
+  color: var(--color-text-light);
+}
+
+.checklist-description {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+}
+
+.all-checked-message {
+  text-align: center;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-success);
+  padding: var(--space-lg);
+  background: rgba(0, 184, 148, 0.08);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-xl);
+}
+
+/* --- Day 19: Improve --- */
+.improve-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-light);
+}
+
+.improve-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.improve-input {
+  min-height: 120px;
+}
+
+.improve-feedback {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(0, 184, 148, 0.08);
+  border-radius: var(--radius-lg);
+  color: var(--color-success);
+  font-weight: var(--fw-medium);
+}
+
+/* --- Day 20: Showcase --- */
+.showcase-title {
+  font-size: var(--fs-3xl) !important;
+  background: linear-gradient(135deg, #FFD700, #FF6B6B, #4ECDC4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.showcase-section {
+  margin: var(--space-2xl) 0;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.showcase-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
+  transition: all var(--transition-base);
+}
+
+.showcase-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.showcase-item-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.showcase-item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.showcase-item-day {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-light);
+}
+
+.showcase-item-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+}
+
+.showcase-certificate-area {
+  text-align: center;
+  margin: var(--space-3xl) 0;
+}
+
+.certificate-btn {
+  font-size: var(--fs-xl) !important;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .fw-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .fw-title {
+    font-size: var(--fs-xl);
+  }
+
+  .showcase-grid {
+    grid-template-columns: 1fr;
+  }
+}

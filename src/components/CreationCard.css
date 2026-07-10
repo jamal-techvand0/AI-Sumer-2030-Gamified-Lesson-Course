@@ -1,0 +1,60 @@
+/* Creation Card Styles */
+
+.creation-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-light);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.creation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.creation-card-image {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.creation-card-emoji {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+.creation-card-day {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  background: rgba(255,255,255,0.9);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+}
+
+.creation-card-body {
+  padding: var(--space-lg);
+}
+
+.creation-card-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.creation-card-reflection {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  margin-bottom: var(--space-md);
+  line-height: var(--lh-relaxed);
+}

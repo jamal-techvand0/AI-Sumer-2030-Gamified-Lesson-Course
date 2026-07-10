@@ -1,0 +1,177 @@
+/* Certificate Styles */
+
+.certificate {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+.certificate-border {
+  background: linear-gradient(135deg, #FFD700, #FFA500, #FFD700, #FF8C42, #FFD700);
+  background-size: 300% 300%;
+  animation: gradient 6s ease infinite;
+  padding: 6px;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl), 0 0 40px rgba(255, 215, 0, 0.3);
+}
+
+.certificate-inner {
+  background: linear-gradient(180deg, #FFFEF5 0%, #FFF8E7 100%);
+  border-radius: calc(var(--radius-2xl) - 4px);
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.certificate-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 90% 90%, rgba(255, 140, 66, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.certificate-ribbon {
+  font-size: 3.5rem;
+  margin-bottom: var(--space-sm);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.certificate-stars {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  font-size: 1.5rem;
+}
+
+.certificate-stars span {
+  animation: starTwinkle 2s ease-in-out infinite;
+}
+.certificate-stars span:nth-child(2) { animation-delay: 0.5s; }
+.certificate-stars span:nth-child(3) { animation-delay: 1s; }
+
+.certificate-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: #8B6914;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: var(--space-md);
+}
+
+.certificate-divider {
+  width: 120px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #D4A843, transparent);
+  margin: 0 auto var(--space-lg);
+  border-radius: var(--radius-full);
+}
+
+.certificate-subtitle {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.certificate-name {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-extrabold);
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+  background: linear-gradient(135deg, #8B6914, #D4A843);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.certificate-text {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-relaxed);
+  margin-bottom: var(--space-sm);
+}
+
+.certificate-program {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  margin: var(--space-md) 0;
+}
+
+.certificate-emoji {
+  margin: 0 var(--space-sm);
+}
+
+.certificate-stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2xl);
+  margin: var(--space-xl) 0;
+  padding: var(--space-lg) 0;
+  border-top: 1px solid rgba(212, 168, 67, 0.2);
+  border-bottom: 1px solid rgba(212, 168, 67, 0.2);
+}
+
+.certificate-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.certificate-stat-number {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-extrabold);
+  color: #8B6914;
+}
+
+.certificate-stat-label {
+  font-size: var(--fs-xs);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.certificate-badge {
+  display: inline-block;
+  margin: var(--space-lg) auto;
+  padding: var(--space-sm) var(--space-xl);
+  background: linear-gradient(135deg, #D4A843, #8B6914);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 1px;
+}
+
+.certificate-footer {
+  margin-top: var(--space-lg);
+}
+
+.certificate-footer p {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .certificate-inner {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .certificate-name {
+    font-size: var(--fs-2xl);
+  }
+
+  .certificate-stats {
+    gap: var(--space-lg);
+  }
+}
