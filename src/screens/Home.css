@@ -12,7 +12,11 @@
 .home-title {
   font-size: var(--fs-3xl);
   font-weight: var(--fw-extrabold);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-purple));
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-purple)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -36,15 +40,59 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-lg);
-  background: var(--color-bg-card);
-  border: 2px solid var(--color-border-light);
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 107, 107, 0.12);
   border-radius: var(--radius-full);
   font-weight: var(--fw-semibold);
   font-size: var(--fs-sm);
+  box-shadow: var(--shadow-sm);
 }
 
 .stat-pill-icon {
   font-size: var(--fs-base);
+}
+
+/* Adventure HUD */
+.home-adventure-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.12),
+    rgba(78, 205, 196, 0.14)
+  );
+  border: 1px solid rgba(255, 107, 107, 0.16);
+  border-radius: var(--radius-2xl);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-card);
+}
+
+.home-hud-label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.home-hud-title {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-xs);
+}
+
+.home-hud-copy {
+  color: var(--color-text-secondary);
+}
+
+.home-hud-stats {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 /* Progress bar area */
@@ -75,11 +123,15 @@
 }
 
 .week-section {
-  background: var(--color-bg-card);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96),
+    rgba(255, 248, 240, 0.92)
+  );
   border-radius: var(--radius-2xl);
   padding: var(--space-xl);
   box-shadow: var(--shadow-card);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid rgba(255, 107, 107, 0.12);
 }
 
 .week-header {
@@ -116,13 +168,14 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-lg) var(--space-sm);
-  border: 2px solid var(--color-border-light);
+  border: 2px solid rgba(255, 107, 107, 0.12);
   border-radius: var(--radius-xl);
   cursor: pointer;
-  background: var(--color-bg-card);
+  background: linear-gradient(180deg, #fff, #fffaf5);
   transition: all var(--transition-base);
   font-family: var(--font-main);
   position: relative;
+  box-shadow: var(--shadow-sm);
 }
 
 .day-node:hover:not(.locked) {
@@ -238,6 +291,10 @@
   .home-progress-bar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .home-adventure-hud {
+    padding: var(--space-lg);
   }
 }
 

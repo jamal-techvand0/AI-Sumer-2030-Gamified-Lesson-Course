@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
-import './Mascot.css';
+import { useState, useEffect } from "react";
+import { Sparkles, Brain, Rocket, Trophy, Waves } from "lucide-react";
+import "./Mascot.css";
 
-export default function Mascot({ message, size = 'md', animate = true, mood = 'happy' }) {
+export default function Mascot({
+  message,
+  size = "md",
+  animate = true,
+  mood = "happy",
+}) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -10,32 +16,36 @@ export default function Mascot({ message, size = 'md', animate = true, mood = 'h
   }, [message]);
 
   const sizeMap = {
-    sm: { body: 48, fontSize: '1.5rem' },
-    md: { body: 72, fontSize: '2.5rem' },
-    lg: { body: 96, fontSize: '3.5rem' },
-    xl: { body: 120, fontSize: '4.5rem' },
+    sm: { body: 48, fontSize: "1.5rem" },
+    md: { body: 72, fontSize: "2.5rem" },
+    lg: { body: 96, fontSize: "3.5rem" },
+    xl: { body: 120, fontSize: "4.5rem" },
   };
 
   const { body, fontSize } = sizeMap[size] || sizeMap.md;
 
-  const moodEmoji = {
-    happy: '🤖',
-    excited: '🤩',
-    thinking: '🧐',
-    proud: '😊',
-    celebrating: '🥳',
-    waving: '👋',
+  const moodIcon = {
+    happy: <Sparkles size={body * 0.42} />,
+    excited: <Rocket size={body * 0.42} />,
+    thinking: <Brain size={body * 0.42} />,
+    proud: <Trophy size={body * 0.42} />,
+    celebrating: <Waves size={body * 0.42} />,
+    waving: <Sparkles size={body * 0.42} />,
   };
 
   return (
-    <div className={`mascot-container ${isVisible ? 'visible' : ''}`}>
+    <div className={`mascot-container ${isVisible ? "visible" : ""}`}>
       <div className="mascot-character-row">
         <div
-          className={`mascot-body ${animate ? 'animate-float' : ''}`}
+          className={`mascot-body ${animate ? "animate-float" : ""}`}
           style={{ width: body, height: body, fontSize }}
         >
-          <span className="mascot-face" role="img" aria-label="Sparky the mascot">
-            {moodEmoji[mood] || moodEmoji.happy}
+          <span
+            className="mascot-face"
+            role="img"
+            aria-label="Sparky the mascot"
+          >
+            {moodIcon[mood] || moodIcon.happy}
           </span>
           <div className="mascot-glow" />
         </div>

@@ -1,30 +1,47 @@
-import { useState } from 'react';
-import { mockCreations } from '../data/lessonData';
-import CreationCard from '../components/CreationCard';
-import Mascot from '../components/Mascot';
-import './Portfolio.css';
+import { useState } from "react";
+import { mockCreations } from "../data/lessonData";
+import CreationCard from "../components/CreationCard";
+import Mascot from "../components/Mascot";
+import "./Portfolio.css";
 
-export default function Portfolio({ studentName, animalName, animalEmoji, onBack }) {
-  const [filterWeek, setFilterWeek] = useState('All');
+export default function Portfolio({
+  studentName,
+  animalName,
+  animalEmoji,
+  onBack,
+}) {
+  const [filterWeek, setFilterWeek] = useState("All");
 
-  const filteredCreations = filterWeek === 'All'
-    ? mockCreations
-    : mockCreations.filter(c => c.week === Number(filterWeek));
+  const filteredCreations =
+    filterWeek === "All"
+      ? mockCreations
+      : mockCreations.filter((c) => c.week === Number(filterWeek));
 
   const totalCreations = mockCreations.length;
 
   return (
     <div className="portfolio screen">
       <div className="container">
-        <button className="btn btn-ghost btn-sm" onClick={onBack}>← Back to Map</button>
+        <button className="btn btn-ghost btn-sm" onClick={onBack}>
+          ← Back to Map
+        </button>
 
         <div className="portfolio-header animate-fadeInDown">
           <div>
-            <h1 className="portfolio-title">{animalEmoji} {studentName}'s Portfolio</h1>
-            <p className="portfolio-subtitle">Your collection of AI masterpieces!</p>
+            <h1 className="portfolio-title">
+              <span className="portfolio-title-icon">
+                <Sparkles size={24} />
+              </span>{" "}
+              {studentName}'s Portfolio
+            </h1>
+            <p className="portfolio-subtitle">
+              Your collection of AI masterpieces!
+            </p>
           </div>
           <div className="portfolio-stats">
-            <span className="badge badge-primary">{totalCreations} Total Creations</span>
+            <span className="badge badge-primary">
+              {totalCreations} Total Creations
+            </span>
           </div>
         </div>
 
@@ -40,15 +57,15 @@ export default function Portfolio({ studentName, animalName, animalEmoji, onBack
             <div className="portfolio-filters animate-fadeInUp delay-1">
               <div className="tabs">
                 <button
-                  className={`tab ${filterWeek === 'All' ? 'active' : ''}`}
-                  onClick={() => setFilterWeek('All')}
+                  className={`tab ${filterWeek === "All" ? "active" : ""}`}
+                  onClick={() => setFilterWeek("All")}
                 >
                   All Creations
                 </button>
-                {[1, 2, 3, 4].map(week => (
+                {[1, 2, 3, 4].map((week) => (
                   <button
                     key={week}
-                    className={`tab ${filterWeek === week ? 'active' : ''}`}
+                    className={`tab ${filterWeek === week ? "active" : ""}`}
                     onClick={() => setFilterWeek(week)}
                   >
                     Week {week}
@@ -59,7 +76,11 @@ export default function Portfolio({ studentName, animalName, animalEmoji, onBack
 
             <div className="portfolio-grid">
               {filteredCreations.map((creation, i) => (
-                <CreationCard key={creation.day} creation={creation} index={i} />
+                <CreationCard
+                  key={creation.day}
+                  creation={creation}
+                  index={i}
+                />
               ))}
             </div>
 

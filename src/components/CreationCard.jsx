@@ -1,14 +1,25 @@
-import './CreationCard.css';
+import { Sparkles } from "lucide-react";
+import "./CreationCard.css";
 
 export default function CreationCard({ creation, onClick, index = 0 }) {
   return (
     <div
       className="creation-card animate-fadeInUp"
-      style={{ animationDelay: `${index * 0.08}s`, '--card-color': creation.color }}
+      style={{
+        animationDelay: `${index * 0.08}s`,
+        "--card-color": creation.color,
+      }}
       onClick={onClick}
     >
-      <div className="creation-card-image" style={{ background: `linear-gradient(135deg, ${creation.color}33, ${creation.color}66)` }}>
-        <span className="creation-card-emoji">{creation.emoji}</span>
+      <div
+        className="creation-card-image"
+        style={{
+          background: `linear-gradient(135deg, ${creation.color}33, ${creation.color}66)`,
+        }}
+      >
+        <span className="creation-card-emoji">
+          <Sparkles size={40} />
+        </span>
         <span className="creation-card-day">Day {creation.day}</span>
       </div>
       <div className="creation-card-body">
