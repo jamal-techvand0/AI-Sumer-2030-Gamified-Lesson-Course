@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   Compass,
@@ -37,6 +37,12 @@ export default function DailyLesson({
   const [proofType, setProofType] = useState("self");
   const [proofValue, setProofValue] = useState("");
   const [returning, setReturning] = useState(false);
+  const [revealMode, setRevealMode] = useState(false);
+  const [comicPanel, setComicPanel] = useState(0);
+  const [promptStyle, setPromptStyle] = useState("specific");
+  const [storyboardOrder, setStoryboardOrder] = useState([0, 1, 2]);
+  const [completionPending, setCompletionPending] = useState(false);
+  const completionTimerRef = useRef(null);
 
   const walkthroughSteps = useMemo(
     () =>
@@ -61,13 +67,27 @@ export default function DailyLesson({
     );
   }, [dayNumber, reflection]);
 
+  useEffect(() => {
+    return () => {
+      if (completionTimerRef.current) {
+        window.clearTimeout(completionTimerRef.current);
+      }
+    };
+  }, []);
+
   if (!day) return null;
 
   const handleComplete = () => {
+    if (completionPending) return;
+
+    setCompletionPending(true);
     setShowComplete(true);
-    setTimeout(() => {
+    setReturning(false);
+
+    completionTimerRef.current = window.setTimeout(() => {
+      setCompletionPending(false);
       onComplete(dayNumber);
-    }, 1500);
+    }, 800);
   };
 
   const nextStep = () => {
@@ -87,11 +107,34 @@ export default function DailyLesson({
     }
   };
 
+  const rotateStoryboard = () => {
+    setStoryboardOrder((current) => [
+      current[current.length - 1],
+      ...current.slice(0, -1),
+    ]);
+  };
+
   return (
     <div className="lesson screen">
       {showComplete && (
         <div className="lesson-complete-overlay">
           <div className="lesson-complete-message animate-popIn">
+            <div className="lesson-complete-burst" aria-hidden="true">
+              {Array.from({ length: 12 }).map((_, index) => (
+                <span
+                  key={index}
+                  className="lesson-complete-burst-piece"
+                  style={{
+                    left: `${8 + (index % 6) * 14}%`,
+                    animationDelay: `${index * 0.03}s`,
+                    background: ["#FF6B6B", "#4ECDC4", "#FFE66D", "#B19CD9"][
+                      index % 4
+                    ],
+                    ["--drift-x"]: `${index % 2 === 0 ? -30 : 30}px`,
+                  }}
+                />
+              ))}
+            </div>
             <span className="complete-emoji">
               <Sparkles size={48} />
             </span>
@@ -102,7 +145,14 @@ export default function DailyLesson({
       )}
 
       <div className="container container-narrow">
-        <button className="btn btn-ghost btn-sm lesson-back" onClick={onBack}>
+        <button
+          className="btn btn-ghost btn-sm lesson-back"
+          onClick={() => {
+            setReturning(false);
+            setShowComplete(false);
+            onBack();
+          }}
+        >
           <ArrowLeft size={16} /> Back to Map
         </button>
 
@@ -175,6 +225,130 @@ export default function DailyLesson({
             </p>
           </div>
         </div>
+
+        {day.day === 4 && (
+          <div className="lesson-section animate-fadeInUp delay-3">
+            <div className="lesson-interactive-card">
+              <div className="lesson-interactive-header">
+                <h2 className="lesson-section-title">
+                  <Sparkles size={20} /> Reveal your impossible scene
+                </h2>
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={() => setRevealMode((value) => !value)}
+                >
+                  {revealMode ? "Show normal" : "Reveal silly version"}
+                </button>
+              </div>
+              <div className={`reveal-card ${revealMode ? "flipped" : ""}`}>
+                <div className="reveal-card-face reveal-card-face-normal">
+                  <span>Normal</span>
+                  <p>Your {animalName} in a calm forest clearing.</p>
+                </div>
+                <div className="reveal-card-face reveal-card-face-wild">
+                  <span>Surprise!</span>
+                  <p>Your {animalName} in a moonlit pirate parade.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {day.day === 7 && (
+          <div className="lesson-section animate-fadeInUp delay-3">
+            <div className="lesson-interactive-card">
+              <div className="lesson-interactive-header">
+                <h2 className="lesson-section-title">
+                  <Sparkles size={20} /> Comic panel reveal
+                </h2>
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={() =>
+                    setComicPanel((value) => Math.min(value + 1, 2))
+                  }
+                >
+                  Reveal next panel
+                </button>
+              </div>
+              <div className="comic-strip">
+                {[
+                  { title: "Panel 1", text: "The adventure begins." },
+                  { title: "Panel 2", text: "A twist changes everything." },
+                  { title: "Panel 3", text: "The big reveal lands." },
+                ].map((panel, index) => (
+                  <div
+                    key={panel.title}
+                    className={`comic-panel ${index <= comicPanel ? "visible" : ""}`}
+                  >
+                    <strong>{panel.title}</strong>
+                    <p>{panel.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {day.day === 13 && (
+          <div className="lesson-section animate-fadeInUp delay-3">
+            <div className="lesson-interactive-card">
+              <div className="lesson-interactive-header">
+                <h2 className="lesson-section-title">
+                  <Sparkles size={20} /> Prompt power switch
+                </h2>
+              </div>
+              <div className="prompt-toggle">
+                <button
+                  className={`prompt-toggle-pill ${promptStyle === "vague" ? "active" : ""}`}
+                  onClick={() => setPromptStyle("vague")}
+                >
+                  Vague
+                </button>
+                <button
+                  className={`prompt-toggle-pill ${promptStyle === "specific" ? "active" : ""}`}
+                  onClick={() => setPromptStyle("specific")}
+                >
+                  Specific
+                </button>
+              </div>
+              <div className="prompt-compare-card">
+                <p>
+                  {promptStyle === "vague"
+                    ? "Make a picture of my animal."
+                    : "Create a cinematic scene of your animal discovering a glowing lantern in a rain-soaked jungle at sunrise."}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {day.day === 16 && (
+          <div className="lesson-section animate-fadeInUp delay-3">
+            <div className="lesson-interactive-card">
+              <div className="lesson-interactive-header">
+                <h2 className="lesson-section-title">
+                  <Sparkles size={20} /> Storyboard order
+                </h2>
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={rotateStoryboard}
+                >
+                  Shuffle order
+                </button>
+              </div>
+              <div className="storyboard-list">
+                {storyboardOrder.map((index) => (
+                  <div key={index} className="storyboard-item">
+                    <span className="storyboard-step">Scene {index + 1}</span>
+                    <p>
+                      {["Opening shot", "Middle twist", "Final beat"][index]}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="lesson-section animate-fadeInUp delay-3">
           <div

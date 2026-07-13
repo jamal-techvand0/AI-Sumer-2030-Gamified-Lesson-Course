@@ -4,8 +4,12 @@
 
 /* ---- Entrance Animations ---- */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
@@ -90,67 +94,150 @@
 
 /* ---- Continuous / Loop Animations ---- */
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
   }
   50% {
-    box-shadow: 0 0 25px rgba(255, 107, 107, 0.6), 0 0 50px rgba(255, 107, 107, 0.2);
+    box-shadow:
+      0 0 25px rgba(255, 107, 107, 0.6),
+      0 0 50px rgba(255, 107, 107, 0.2);
   }
 }
 
 @keyframes pulseGlowGreen {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 10px rgba(0, 184, 148, 0.3);
   }
   50% {
-    box-shadow: 0 0 25px rgba(0, 184, 148, 0.6), 0 0 50px rgba(0, 184, 148, 0.2);
+    box-shadow:
+      0 0 25px rgba(0, 184, 148, 0.6),
+      0 0 50px rgba(0, 184, 148, 0.2);
   }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes stampPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) rotate(-8deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes burstFloat {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-90px) translateX(var(--drift-x, 0px)) scale(1.1);
+    opacity: 0;
+  }
 }
 
 @keyframes wave {
-  0% { transform: rotate(0deg); }
-  10% { transform: rotate(14deg); }
-  20% { transform: rotate(-8deg); }
-  30% { transform: rotate(14deg); }
-  40% { transform: rotate(-4deg); }
-  50% { transform: rotate(10deg); }
-  60% { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes dash {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* ---- Confetti ---- */
@@ -166,50 +253,118 @@
 }
 
 @keyframes confettiSway {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(30px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(30px);
+  }
 }
 
 /* ---- Special Effects ---- */
 @keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes starTwinkle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
 }
 
 @keyframes typewriter {
-  from { width: 0; }
-  to { width: 100%; }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 /* ---- Utility Classes ---- */
-.animate-fadeIn { animation: fadeIn var(--transition-base) both; }
-.animate-fadeInUp { animation: fadeInUp 0.5s ease both; }
-.animate-fadeInDown { animation: fadeInDown 0.5s ease both; }
-.animate-fadeInLeft { animation: fadeInLeft 0.5s ease both; }
-.animate-fadeInRight { animation: fadeInRight 0.5s ease both; }
-.animate-slideInUp { animation: slideInUp 0.5s ease both; }
-.animate-scaleIn { animation: scaleIn 0.4s ease both; }
-.animate-popIn { animation: popIn 0.5s ease both; }
-.animate-bounce { animation: bounce 2s ease-in-out infinite; }
-.animate-pulse { animation: pulse 2s ease-in-out infinite; }
-.animate-float { animation: float 3s ease-in-out infinite; }
-.animate-wiggle { animation: wiggle 1s ease-in-out infinite; }
-.animate-wave { animation: wave 2.5s ease-in-out infinite; }
-.animate-shimmer { animation: shimmer 2s linear infinite; }
-.animate-spin { animation: spin 1s linear infinite; }
+.animate-fadeIn {
+  animation: fadeIn var(--transition-base) both;
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease both;
+}
+.animate-fadeInDown {
+  animation: fadeInDown 0.5s ease both;
+}
+.animate-fadeInLeft {
+  animation: fadeInLeft 0.5s ease both;
+}
+.animate-fadeInRight {
+  animation: fadeInRight 0.5s ease both;
+}
+.animate-slideInUp {
+  animation: slideInUp 0.5s ease both;
+}
+.animate-scaleIn {
+  animation: scaleIn 0.4s ease both;
+}
+.animate-popIn {
+  animation: popIn 0.5s ease both;
+}
+.animate-bounce {
+  animation: bounce 2s ease-in-out infinite;
+}
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+.animate-wave {
+  animation: wave 2.5s ease-in-out infinite;
+}
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
 
 /* Staggered delay helpers */
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
-.delay-4 { animation-delay: 0.4s; }
-.delay-5 { animation-delay: 0.5s; }
-.delay-6 { animation-delay: 0.6s; }
-.delay-7 { animation-delay: 0.7s; }
-.delay-8 { animation-delay: 0.8s; }
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.2s;
+}
+.delay-3 {
+  animation-delay: 0.3s;
+}
+.delay-4 {
+  animation-delay: 0.4s;
+}
+.delay-5 {
+  animation-delay: 0.5s;
+}
+.delay-6 {
+  animation-delay: 0.6s;
+}
+.delay-7 {
+  animation-delay: 0.7s;
+}
+.delay-8 {
+  animation-delay: 0.8s;
+}

@@ -122,9 +122,58 @@ h6 {
 
 /* ---- Screen transitions ---- */
 .screen {
-  animation: fadeInUp 0.4s ease both;
+  animation: fadeInUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   padding: var(--space-2xl) 0;
   min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+}
+
+button,
+.btn,
+.day-node,
+.lesson-proof-pill,
+.tab,
+.animal-option,
+.creation-card,
+.lesson-task-card,
+.lesson-carousel-card,
+.lesson-action-card,
+.example-card,
+.reflect-card,
+.lesson-dot {
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    background-color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+button:hover,
+.btn:hover,
+.day-node:hover:not(.locked),
+.lesson-proof-pill:hover,
+.tab:hover,
+.animal-option:hover,
+.creation-card:hover,
+.lesson-task-card:hover,
+.lesson-carousel-card:hover,
+.lesson-action-card:hover,
+.example-card:hover,
+.reflect-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-md);
+}
+
+button:active,
+.btn:active,
+.day-node:active:not(.locked),
+.lesson-proof-pill:active,
+.tab:active,
+.animal-option:active {
+  transform: scale(0.98);
 }
 
 /* ---- Nav Bar ---- */
@@ -240,6 +289,17 @@ h6 {
 ::selection {
   background: rgba(255, 107, 107, 0.2);
   color: var(--color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ---- Responsive utils ---- */

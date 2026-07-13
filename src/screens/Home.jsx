@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   BookOpenCheck,
   Flame,
@@ -33,6 +34,22 @@ export default function Home({
     totalCompleted >= 20
       ? "All missions complete!"
       : `Next badge at ${Math.min(20, totalCompleted + 5)} days`;
+
+  const [lockedPulseDay, setLockedPulseDay] = useState(null);
+
+  useEffect(() => {
+    if (!lockedPulseDay) return;
+    const timer = window.setTimeout(() => setLockedPulseDay(null), 700);
+    return () => window.clearTimeout(timer);
+  }, [lockedPulseDay]);
+
+  const handleDayNodeClick = (day) => {
+    if (day.day > currentDay) {
+      setLockedPulseDay(day.day);
+      return;
+    }
+    onDayClick(day.day);
+  };
 
   return (
     <div className="home screen">
@@ -89,6 +106,12 @@ export default function Home({
         </div>
 
         {/* Progress bar */}
+        {streak >= 2 && totalCompleted > 0 && (
+          <div className="home-momentum-pill animate-fadeInUp">
+            <Sparkles size={16} /> On a roll!
+          </div>
+        )}
+
         <div className="home-progress-bar animate-fadeIn">
           <div className="progress-bar">
             <div
@@ -146,9 +169,9 @@ export default function Home({
                     return (
                       <button
                         key={day.day}
-                        className={`day-node ${isCompleted ? "completed" : ""} ${isCurrent ? "current" : ""} ${isLocked ? "locked" : ""}`}
-                        onClick={() => !isLocked && onDayClick(day.day)}
-                        disabled={isLocked}
+                        className={`day-node ${isCompleted ? "completed" : ""} ${isCurrent ? "current" : ""} ${isLocked ? "locked" : ""} ${lockedPulseDay === day.day ? "shake" : ""}`}
+                        onClick={() => handleDayNodeClick(day)}
+                        aria-disabled={isLocked}
                         style={{ "--day-color": day.color }}
                       >
                         <div className="day-node-circle">
@@ -157,7 +180,9 @@ export default function Home({
                               <Sparkles size={18} />
                             </span>
                           ) : isLocked ? (
-                            <span className="day-lock">
+                            <span
+                              className={`day-lock ${lockedPulseDay === day.day ? "wiggle" : ""}`}
+                            >
                               <BookOpenCheck size={16} />
                             </span>
                           ) : (

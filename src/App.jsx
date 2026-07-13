@@ -36,32 +36,47 @@ function App() {
   };
 
   const navigateToDay = (dayNum) => {
+    if (!Number.isInteger(dayNum)) return;
     setActiveLessonDay(dayNum);
 
-    // Check if it's a special final week day
-    if (dayNum === 17) setCurrentScreen("day17");
-    else if (dayNum === 18) setCurrentScreen("day18");
-    else if (dayNum === 19) setCurrentScreen("day19");
-    else if (dayNum === 20) setCurrentScreen("day20");
-    // Check if it's a weekly recap day (days 5, 10, 15)
-    else if (dayNum % 5 === 0 && dayNum < 20) {
+    if (dayNum === 17) {
+      setActiveRecapWeek(null);
+      setCurrentScreen("day17");
+    } else if (dayNum === 18) {
+      setActiveRecapWeek(null);
+      setCurrentScreen("day18");
+    } else if (dayNum === 19) {
+      setActiveRecapWeek(null);
+      setCurrentScreen("day19");
+    } else if (dayNum === 20) {
+      setActiveRecapWeek(null);
+      setCurrentScreen("day20");
+    } else if (dayNum % 5 === 0 && dayNum < 20) {
       setActiveRecapWeek(dayNum / 5);
       setCurrentScreen("recap");
     } else {
+      setActiveRecapWeek(null);
       setCurrentScreen("lesson");
     }
   };
 
   const handleDayComplete = (dayNum) => {
-    if (!completedDays.includes(dayNum)) {
-      setCompletedDays([...completedDays, dayNum]);
-      setStreak((s) => s + 1);
+    if (!Number.isInteger(dayNum)) return;
 
-      // Advance to next day if we just completed the current day
-      if (dayNum === currentDayNumber && currentDayNumber < 20) {
-        setCurrentDayNumber(currentDayNumber + 1);
+    setCompletedDays((prev) => {
+      if (prev.includes(dayNum)) {
+        return prev;
       }
+      return [...prev, dayNum];
+    });
+
+    setStreak((s) => s + 1);
+
+    if (dayNum === currentDayNumber && currentDayNumber < 20) {
+      setCurrentDayNumber((value) => value + 1);
     }
+
+    setActiveRecapWeek(null);
     setCurrentScreen("home");
   };
 
@@ -172,7 +187,10 @@ function App() {
           <div className="navbar-inner">
             <div
               className="navbar-brand"
-              onClick={() => setCurrentScreen("home")}
+              onClick={() => {
+                setActiveRecapWeek(null);
+                setCurrentScreen("home");
+              }}
             >
               <span className="navbar-brand-emoji">
                 {student.emoji ? <Sparkles size={18} /> : <Compass size={18} />}
@@ -182,13 +200,19 @@ function App() {
             <div className="navbar-actions">
               <button
                 className={`navbar-link ${currentScreen === "home" ? "active" : ""}`}
-                onClick={() => setCurrentScreen("home")}
+                onClick={() => {
+                  setActiveRecapWeek(null);
+                  setCurrentScreen("home");
+                }}
               >
                 <span>Map</span>
               </button>
               <button
                 className={`navbar-link ${currentScreen === "portfolio" ? "active" : ""}`}
-                onClick={() => setCurrentScreen("portfolio")}
+                onClick={() => {
+                  setActiveRecapWeek(null);
+                  setCurrentScreen("portfolio");
+                }}
               >
                 <span>Portfolio</span>
               </button>
@@ -197,7 +221,9 @@ function App() {
         </nav>
       )}
 
-      <main>{renderScreen()}</main>
+      <main key={currentScreen} className="app-main">
+        {renderScreen()}
+      </main>
 
       {/* Global confetti effect for reaching end of weeks or project completion */}
       {(currentDayNumber === 6 ||

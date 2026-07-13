@@ -9,6 +9,7 @@ export default function Mascot({
   mood = "happy",
 }) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isPoked, setIsPoked] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 200);
@@ -33,19 +34,28 @@ export default function Mascot({
     waving: <Sparkles size={body * 0.42} />,
   };
 
+  const effectiveMood = isPoked ? "celebrating" : mood;
+
+  const handleInteract = () => {
+    setIsPoked(true);
+    window.setTimeout(() => setIsPoked(false), 600);
+  };
+
   return (
     <div className={`mascot-container ${isVisible ? "visible" : ""}`}>
       <div className="mascot-character-row">
         <div
-          className={`mascot-body ${animate ? "animate-float" : ""}`}
+          className={`mascot-body ${animate ? "mascot-idle" : ""} ${isPoked ? "mascot-poked" : ""}`}
           style={{ width: body, height: body, fontSize }}
+          onClick={handleInteract}
+          onMouseEnter={handleInteract}
         >
           <span
             className="mascot-face"
             role="img"
             aria-label="Sparky the mascot"
           >
-            {moodIcon[mood] || moodIcon.happy}
+            {moodIcon[effectiveMood] || moodIcon.happy}
           </span>
           <div className="mascot-glow" />
         </div>

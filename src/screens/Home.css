@@ -95,6 +95,20 @@
   flex-wrap: wrap;
 }
 
+/* Momentum banner */
+.home-momentum-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  padding: 10px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 107, 107, 0.12);
+  color: var(--color-primary-dark);
+  font-weight: var(--fw-semibold);
+  box-shadow: var(--shadow-sm);
+}
+
 /* Progress bar area */
 .home-progress-bar {
   display: flex;
@@ -192,13 +206,17 @@
 .day-node.current {
   border-color: var(--day-color, var(--color-primary));
   box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
-  animation: pulseGlow 2s ease-in-out infinite;
+  animation: currentNodePulse 1.8s ease-in-out infinite;
   background: rgba(255, 107, 107, 0.04);
 }
 
 .day-node.locked {
-  opacity: 0.5;
+  opacity: 0.62;
   cursor: not-allowed;
+}
+
+.day-node.shake {
+  animation: dayNodeShake 0.55s ease;
 }
 
 .day-node-circle {
@@ -232,6 +250,10 @@
 
 .day-lock {
   font-size: var(--fs-base);
+}
+
+.day-lock.wiggle {
+  animation: dayNodeShake 0.55s ease;
 }
 
 .day-emoji {
@@ -270,6 +292,34 @@
 }
 
 /* Responsive */
+@keyframes currentNodePulse {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.015);
+    box-shadow: 0 0 0 8px rgba(255, 107, 107, 0.08);
+  }
+}
+
+@keyframes dayNodeShake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+}
+
 @media (max-width: 768px) {
   .home-header {
     flex-direction: column;

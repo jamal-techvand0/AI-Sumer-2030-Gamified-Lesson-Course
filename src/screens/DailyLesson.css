@@ -147,6 +147,163 @@
   color: var(--color-text);
 }
 
+/* Interactive moments */
+.lesson-interactive-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(255, 247, 237, 0.95)
+  );
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card);
+  border: 2px solid rgba(255, 107, 107, 0.14);
+}
+
+.lesson-interactive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.reveal-card {
+  position: relative;
+  display: grid;
+  min-height: 180px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: inset 0 -8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.reveal-card-face {
+  grid-area: 1 / 1;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition:
+    transform 0.45s ease,
+    opacity 0.35s ease;
+}
+
+.reveal-card-face span {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.reveal-card-face p {
+  color: var(--color-text);
+  font-size: var(--fs-base);
+}
+
+.reveal-card-face-normal {
+  background: linear-gradient(135deg, #fff8e7, #ffe7c8);
+  transform: rotateY(0deg);
+}
+
+.reveal-card-face-wild {
+  background: linear-gradient(135deg, #4ecdc4, #1aa39e);
+  color: white;
+  transform: rotateY(180deg);
+  opacity: 0;
+}
+
+.reveal-card.flipped .reveal-card-face-normal {
+  transform: rotateY(180deg);
+  opacity: 0;
+}
+
+.reveal-card.flipped .reveal-card-face-wild {
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
+.comic-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.comic-panel {
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border-light);
+  transform: translateY(8px);
+  opacity: 0;
+  transition: all 0.35s ease;
+}
+
+.comic-panel.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.comic-panel strong {
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.prompt-toggle {
+  display: inline-flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.prompt-toggle-pill {
+  border: 1px solid var(--color-border-light);
+  background: white;
+  border-radius: var(--radius-full);
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: var(--font-main);
+}
+
+.prompt-toggle-pill.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.prompt-compare-card {
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+  background: rgba(78, 205, 196, 0.12);
+  color: var(--color-text);
+}
+
+.storyboard-list {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.storyboard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border-light);
+  transition: transform 0.25s ease;
+}
+
+.storyboard-item:hover {
+  transform: translateX(4px);
+}
+
+.storyboard-step {
+  font-weight: var(--fw-semibold);
+  color: var(--color-primary-dark);
+}
+
 /* Tool action */
 .lesson-action-card {
   background: linear-gradient(
@@ -315,6 +472,7 @@
 }
 
 .lesson-return-card {
+  position: fixed;
   background: white;
   border-radius: var(--radius-2xl);
   padding: var(--space-2xl);
@@ -420,6 +578,24 @@
   padding: var(--space-3xl) var(--space-4xl);
   text-align: center;
   box-shadow: var(--shadow-xl);
+  position: relative;
+  overflow: hidden;
+  animation: stampPop 0.7s cubic-bezier(0.2, 1.1, 0.2, 1);
+}
+
+.lesson-complete-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lesson-complete-burst-piece {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 16px;
+  border-radius: 999px;
+  animation: burstFloat 0.9s ease forwards;
 }
 
 .complete-emoji {
@@ -454,6 +630,10 @@
   }
 
   .lesson-carousel-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .comic-strip {
     grid-template-columns: 1fr;
   }
 

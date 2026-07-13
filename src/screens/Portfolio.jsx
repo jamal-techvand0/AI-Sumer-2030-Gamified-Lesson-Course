@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Sparkles } from "lucide-react";
 import { mockCreations } from "../data/lessonData";
 import CreationCard from "../components/CreationCard";
 import Mascot from "../components/Mascot";
