@@ -16,6 +16,87 @@ const FULL_PROMPT_TOKENS = [
 const day1GeminiSong = {
   id: "day1-gemini-song",
   day: 1,
+  beats: [
+    "hook",
+    "roadmap",
+    "geminiCartoon",
+    "concept",
+    "vocab",
+    "walkthrough",
+    "compare",
+    "gallery",
+    "practice",
+    "builder",
+    "geminiLiveSandbox",
+    "geminiVideoShowcase",
+    "mission",
+    "launch",
+    "completion",
+  ],
+  cartoonScript: [
+    {
+      title: "The Soundless Woods",
+      message: "Nova and {animalName} were exploring the Neon Woods when they realized... there was no sound! No chirps, no beats, nothing.",
+      visual: "silent-woods",
+      mascotMood: "thinking",
+      soundEffect: "whoosh",
+    },
+    {
+      title: "A Bright Idea!",
+      message: "'Wait!' says Nova. 'We can use Gemini AI to compose a brand new theme song for you and bring the music back!'",
+      visual: "idea-spark",
+      mascotMood: "excited",
+      soundEffect: "chime",
+    },
+    {
+      title: "Drafting the Recipe",
+      message: "{animalName} is styling! By mixing a fun genre (Pop) with a brave mood, they wrote down their prompt recipe.",
+      visual: "recipe-scroll",
+      mascotMood: "happy",
+      soundEffect: "flip",
+    },
+    {
+      title: "Gemini Magic!",
+      message: "They pasted it in, pressed Send, and BOOM! Sparkles flew and a retro cassette emerged. The woods started dancing!",
+      visual: "cassette-magic",
+      mascotMood: "celebrating",
+      soundEffect: "levelup",
+    }
+  ],
+  sandboxPresets: [
+    {
+      title: "⚡ Superhero Theme",
+      prompt: "An epic orchestral superhero theme song for a brave {animalName} who saves the forest using laser eyes",
+      genre: "Orchestral",
+      mood: "Mighty",
+      tempo: "Fast",
+      instrument: "Violin",
+    },
+    {
+      title: "🌴 Beach Surf Party",
+      prompt: "A bouncy upbeat pop track for a chill {animalName} catching waves on an iceberg at sunset",
+      genre: "Pop",
+      mood: "Excited",
+      tempo: "Fast",
+      instrument: "Drums",
+    },
+    {
+      title: "☕ Midnight Coffee Shop",
+      prompt: "A smooth, relaxing lo-fi hip hop track with soft guitar chords for a sleepy {animalName} reading a book",
+      genre: "Lo-fi",
+      mood: "Sleepy",
+      tempo: "Slow",
+      instrument: "Guitar",
+    },
+    {
+      title: "🎸 Garage Rock Jam",
+      prompt: "An energetic, distorted rock track with synth leads for a silly {animalName} who loves drumming on pots and pans",
+      genre: "Rock",
+      mood: "Silly",
+      tempo: "Fast",
+      instrument: "Synth",
+    }
+  ],
   theme: {
     color: "#FF6B6B",
     accent: "#FFC93C",
@@ -336,7 +417,59 @@ const day1GeminiSong = {
     xp: { xp: 50, streak: 1, portfolio: 1, portfolioIcon: "🎵" },
   },
 
+  videoShowcase: {
+    title: "Watch it happen on Gemini",
+    intro:
+      "This is a mini-movie of the real Gemini website — watch how a prompt turns into music!",
+    stepDuration: 2200,
+    steps: [
+      {
+        id: "open",
+        label: "Open Gemini",
+        screen: "home",
+        caption: "First you land on gemini.google.com…",
+      },
+      {
+        id: "type",
+        label: "Write your prompt",
+        screen: "prompt-full",
+        tokens: FULL_PROMPT_TOKENS,
+        caption: "Type a detailed recipe — genre, mood, and a fun detail!",
+        cursor: { x: "60%", y: "60%" },
+      },
+      {
+        id: "send",
+        label: "Press send",
+        screen: "prompt-full",
+        tokens: FULL_PROMPT_TOKENS,
+        caption: "Tap the arrow and Gemini gets to work…",
+        cursor: { x: "87%", y: "60%" },
+      },
+      {
+        id: "wait",
+        label: "Gemini composes",
+        screen: "loading",
+        caption: "Sparkles mean it's cooking up your track!",
+      },
+      {
+        id: "listen",
+        label: "Listen!",
+        screen: "result",
+        resultData: { title: "Percy's Surf Anthem.mp3" },
+        caption: "Boom — a real song appears. You can play and save it!",
+        cursor: { x: "55%", y: "55%" },
+      },
+    ],
+  },
+
   mascotLines: {
+    cartoon:
+      "Let me tell you a quick story about how we brought music back to the Neon Woods!",
+    sandbox:
+      "Your turn to be the DJ! Pick a vibe, hit Generate, and hear what Gemini would make.",
+    sandboxResult: "Whoa — that's YOUR track! Try another preset if you want.",
+    videoShowcase:
+      "Now watch this mini-movie — it's the exact Gemini screen you'll use for real.",
     vocab:
       "Before we prompt, let's learn 3 magic words AI creators use — tap each card to flip it!",
     compare: "Quick challenge! Which prompt do YOU think makes a richer song?",

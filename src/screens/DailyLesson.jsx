@@ -79,16 +79,6 @@ export default function DailyLesson({
 
   if (!day) return null;
 
-  if (day.day === 1) {
-    return (
-      <div className="lesson screen">
-        <div className="container container-narrow">
-          <LessonPlayer lesson={day1GeminiSong} />
-        </div>
-      </div>
-    );
-  }
-
   const handleComplete = () => {
     if (completionPending) return;
 
@@ -101,6 +91,23 @@ export default function DailyLesson({
       onComplete(dayNumber);
     }, 800);
   };
+
+  if (day.day === 1) {
+    return (
+      <div className="lesson screen">
+        <div className="container container-narrow">
+          <LessonPlayer
+            lesson={day1GeminiSong}
+            studentName={studentName}
+            animalName={animalName}
+            animalEmoji={animalEmoji}
+            onComplete={handleComplete}
+            onBack={onBack}
+          />
+        </div>
+      </div>
+    );
+  }
 
   const nextStep = () => {
     setActiveStep((current) =>
