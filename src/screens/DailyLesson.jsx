@@ -10,6 +10,8 @@ import {
 import { lessonData } from "../data/lessonData";
 import Mascot from "../components/Mascot";
 import "./DailyLesson.css";
+import LessonPlayer from "../lessons-engine/LessonPlayer";
+import day1GeminiSong from "../lessons/day1-gemini-song";
 
 export default function DailyLesson({
   dayNumber,
@@ -76,6 +78,16 @@ export default function DailyLesson({
   }, []);
 
   if (!day) return null;
+
+  if (day.day === 1) {
+    return (
+      <div className="lesson screen">
+        <div className="container container-narrow">
+          <LessonPlayer lesson={day1GeminiSong} />
+        </div>
+      </div>
+    );
+  }
 
   const handleComplete = () => {
     if (completionPending) return;
