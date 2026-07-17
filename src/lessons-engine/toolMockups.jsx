@@ -29,7 +29,12 @@ export function PromptTokens({ tokens }) {
   return (
     <span>
       {tokens.map((tok, i) => (
-        <span key={i} className={tok.h ? `gsl-token gsl-token-${tok.h}` : undefined}>{tok.t}</span>
+        <span
+          key={i}
+          className={tok.h ? `gsl-token gsl-token-${tok.h}` : undefined}
+        >
+          {tok.t}
+        </span>
       ))}
     </span>
   );
@@ -40,14 +45,18 @@ export function PromptTokens({ tokens }) {
 function AudioResultCard({ data, showSave }) {
   return (
     <div className="gsl-mockup-response-card">
-      <div className="gsl-mockup-albumart"><span className="gsl-mockup-playbtn">▶</span></div>
+      <div className="gsl-mockup-albumart">
+        <span className="gsl-mockup-playbtn">▶</span>
+      </div>
       <div className="gsl-mockup-mini-wave">
         {(data.wave || [6, 14, 9, 18, 11, 16, 8, 13, 10, 15]).map((h, i) => (
           <span key={i} style={{ height: h, animationDelay: `${i * 0.08}s` }} />
         ))}
       </div>
       <span className="gsl-mockup-tracktitle">{data.title}</span>
-      {showSave && <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>}
+      {showSave && (
+        <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>
+      )}
     </div>
   );
 }
@@ -60,20 +69,35 @@ function VideoResultCard({ data, showSave }) {
         <span className="gsl-mockup-videolen">{data.duration || "0:08"}</span>
       </div>
       <span className="gsl-mockup-tracktitle">{data.title}</span>
-      {showSave && <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>}
+      {showSave && (
+        <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>
+      )}
     </div>
   );
 }
 
 function ImageResultCard({ data, showSave }) {
-  const swatches = data.swatches || ["var(--lesson-color)", "var(--lesson-accent)", "var(--lesson-aqua)", "var(--lesson-purple)"];
+  const swatches = data.swatches || [
+    "var(--lesson-color)",
+    "var(--lesson-accent)",
+    "var(--lesson-aqua)",
+    "var(--lesson-purple)",
+  ];
   return (
     <div className="gsl-mockup-response-card">
       <div className="gsl-mockup-imagegrid">
-        {swatches.map((c, i) => <div key={i} className="gsl-mockup-imagecell" style={{ background: c }} />)}
+        {swatches.map((c, i) => (
+          <div
+            key={i}
+            className="gsl-mockup-imagecell"
+            style={{ background: c }}
+          />
+        ))}
       </div>
       <span className="gsl-mockup-tracktitle">{data.title}</span>
-      {showSave && <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>}
+      {showSave && (
+        <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>
+      )}
     </div>
   );
 }
@@ -83,7 +107,9 @@ function TextResultCard({ data, showSave }) {
     <div className="gsl-mockup-response-card gsl-mockup-response-card--text">
       <p className="gsl-mockup-textblock">{data.text}</p>
       <span className="gsl-mockup-tracktitle">{data.title}</span>
-      {showSave && <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>}
+      {showSave && (
+        <button className="gsl-mockup-savebtn">💾 Save to portfolio</button>
+      )}
     </div>
   );
 }
@@ -106,34 +132,58 @@ export const RESULT_RENDERERS = {
 function ChatStyleToolMockup({ tool, step }) {
   const { screen, tokens, cursor } = step;
   const ResultCard = RESULT_RENDERERS[tool.mediaType] || TextResultCard;
-  const resultData = step.resultData || tool.defaultResultData || { title: "Untitled" };
+  const resultData = step.resultData ||
+    tool.defaultResultData || { title: "Untitled" };
 
   return (
     <div className="gsl-webwindow">
       <div className="gsl-webwindow-bar">
-        <span className="gsl-dot red" /><span className="gsl-dot yellow" /><span className="gsl-dot green" />
-        <span className="gsl-webwindow-url">🔒 {tool.urlLabel || tool.url.replace(/^https?:\/\//, "")}</span>
+        <span className="gsl-dot red" />
+        <span className="gsl-dot yellow" />
+        <span className="gsl-dot green" />
+        <span className="gsl-webwindow-url">
+          🔒 {tool.urlLabel || tool.url.replace(/^https?:\/\//, "")}
+        </span>
       </div>
       <div className="gsl-webapp">
-        <div className="gsl-gemini-sidebar" style={{ "--tool-grad-a": tool.brandGradient?.[0], "--tool-grad-b": tool.brandGradient?.[tool.brandGradient.length - 1] }}>
+        <div
+          className="gsl-gemini-sidebar"
+          style={{
+            "--tool-grad-a": tool.brandGradient?.[0],
+            "--tool-grad-b":
+              tool.brandGradient?.[tool.brandGradient.length - 1],
+          }}
+        >
           <div className="gsl-gemini-sidebar-top">
             <span className="gsl-sidebar-icon">☰</span>
             <ToolSpark tool={tool} size={16} />
           </div>
           <button className="gsl-gemini-newchat">+ New chat</button>
           <div className="gsl-gemini-history">
-            {[82, 58, 70, 45].map((w, i) => <span key={i} className="gsl-gemini-hist-line" style={{ width: `${w}%` }} />)}
+            {[82, 58, 70, 45].map((w, i) => (
+              <span
+                key={i}
+                className="gsl-gemini-hist-line"
+                style={{ width: `${w}%` }}
+              />
+            ))}
           </div>
         </div>
 
         <div className="gsl-gemini-main">
           {screen === "home" && (
             <div className="gsl-gemini-home">
-              <ToolSpark tool={tool} size={30} className="gsl-gemini-home-spark" />
+              <ToolSpark
+                tool={tool}
+                size={30}
+                className="gsl-gemini-home-spark"
+              />
               <p className="gsl-gemini-greeting">{tool.greeting}</p>
               <div className="gsl-gemini-pill">
                 <span className="gsl-gemini-pill-plus">+</span>
-                <span className="gsl-gemini-pill-placeholder">{tool.placeholder}</span>
+                <span className="gsl-gemini-pill-placeholder">
+                  {tool.placeholder}
+                </span>
                 <span className="gsl-gemini-pill-mic">🎙️</span>
               </div>
             </div>
@@ -142,12 +192,22 @@ function ChatStyleToolMockup({ tool, step }) {
           {(screen === "prompt" || screen === "prompt-full") && (
             <div className="gsl-gemini-chat">
               <div className="gsl-gemini-toolrow">
-                {(tool.toolChips || ["🎨 Canvas"]).map((c) => <span key={c} className="gsl-gemini-tool-chip">{c}</span>)}
+                {(tool.toolChips || ["🎨 Canvas"]).map((c) => (
+                  <span key={c} className="gsl-gemini-tool-chip">
+                    {c}
+                  </span>
+                ))}
               </div>
               <div className="gsl-gemini-pill gsl-gemini-pill--filled">
                 <span className="gsl-gemini-pill-plus">+</span>
-                <span className="gsl-gemini-pill-text"><PromptTokens tokens={tokens || []} /></span>
-                <span className={`gsl-gemini-sendbtn ${screen === "prompt-full" ? "active" : ""}`}>↑</span>
+                <span className="gsl-gemini-pill-text">
+                  <PromptTokens tokens={tokens || []} />
+                </span>
+                <span
+                  className={`gsl-gemini-sendbtn ${screen === "prompt-full" ? "active" : ""}`}
+                >
+                  ↑
+                </span>
               </div>
             </div>
           )}
@@ -155,21 +215,41 @@ function ChatStyleToolMockup({ tool, step }) {
           {screen === "loading" && (
             <div className="gsl-gemini-loading">
               <ToolSpark tool={tool} size={26} className="gsl-loading-spark" />
-              <span className="gsl-gemini-shimmer">{tool.loadingText || "Working on it…"}</span>
+              <span className="gsl-gemini-shimmer">
+                {tool.loadingText || "Working on it…"}
+              </span>
             </div>
           )}
 
           {(screen === "result" || screen === "save") && (
             <div className="gsl-gemini-response gsl-fadein">
-              <ToolSpark tool={tool} size={18} className="gsl-gemini-response-avatar" />
+              <ToolSpark
+                tool={tool}
+                size={18}
+                className="gsl-gemini-response-avatar"
+              />
               <ResultCard data={resultData} showSave={screen === "save"} />
             </div>
           )}
 
           {cursor && (
-            <div className="gsl-cursor" style={{ left: cursor.x, top: cursor.y }}>
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                <path d="M4 2 L4 19 L8.3 15.4 L11 21 L13.6 19.8 L11 14.3 L17 14.3 Z" fill="white" stroke="#241748" strokeWidth="1.3" strokeLinejoin="round" />
+            <div
+              className="gsl-cursor"
+              style={{ left: cursor.x, top: cursor.y }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 2 L4 19 L8.3 15.4 L11 21 L13.6 19.8 L11 14.3 L17 14.3 Z"
+                  fill="white"
+                  stroke="#241748"
+                  strokeWidth="1.3"
+                  strokeLinejoin="round"
+                />
               </svg>
             </div>
           )}
@@ -183,8 +263,17 @@ function ToolSpark({ tool, size = 20, className = "" }) {
   const [c1, c2, c3] = tool.brandGradient || ["#4285F4", "#9168C0", "#D96570"];
   const gradId = `gsl-sparkle-grad-${tool.id}`;
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} className={className} aria-hidden="true">
-      <path d="M12 1 C12.6 6.2 13.9 9.6 16.5 11.5 C19 13.4 21.6 13.9 23 14 C21.6 14.1 19 14.6 16.5 16.5 C13.9 18.4 12.6 21.8 12 27 C11.4 21.8 10.1 18.4 7.5 16.5 C5 14.6 2.4 14.1 1 14 C2.4 13.9 5 13.4 7.5 11.5 C10.1 9.6 11.4 6.2 12 1 Z" fill={`url(#${gradId})`} />
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M12 1 C12.6 6.2 13.9 9.6 16.5 11.5 C19 13.4 21.6 13.9 23 14 C21.6 14.1 19 14.6 16.5 16.5 C13.9 18.4 12.6 21.8 12 27 C11.4 21.8 10.1 18.4 7.5 16.5 C5 14.6 2.4 14.1 1 14 C2.4 13.9 5 13.4 7.5 11.5 C10.1 9.6 11.4 6.2 12 1 Z"
+        fill={`url(#${gradId})`}
+      />
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="24" y2="24">
           <stop offset="0%" stopColor={c1} />

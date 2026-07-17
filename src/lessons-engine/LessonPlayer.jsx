@@ -31,8 +31,10 @@ class SynthEngine {
       clearTimeout(this.timer);
       this.timer = null;
     }
-    this.nodes.forEach(n => {
-      try { n.stop(); } catch (e) {}
+    this.nodes.forEach((n) => {
+      try {
+        n.stop();
+      } catch (e) {}
     });
     this.nodes = [];
   }
@@ -40,7 +42,7 @@ class SynthEngine {
   playGenre(genre) {
     this.stop();
     this.init();
-    
+
     let isMuted = false;
     try {
       isMuted = useProgressStore.getState().muted;
@@ -50,13 +52,13 @@ class SynthEngine {
     if (isMuted) return;
 
     this.isPlaying = true;
-    
+
     // Choose genre settings
     let chords = [];
     let oscType = "sine";
     let speed = 500; // ms per beat
     let filterFreq = 1000;
-    
+
     if (genre === "Pop") {
       chords = [
         [60, 64, 67], // C
@@ -105,46 +107,47 @@ class SynthEngine {
 
       const time = this.ctx.currentTime;
       const currentChord = chords[Math.floor(beat / 4) % chords.length];
-      
+
       const filter = this.ctx.createBiquadFilter();
       filter.type = "lowpass";
       filter.frequency.setValueAtTime(filterFreq, time);
       filter.Q.setValueAtTime(1, time);
       filter.connect(this.ctx.destination);
-      
-      currentChord.forEach(midiNote => {
+
+      currentChord.forEach((midiNote) => {
         if (!this.ctx) return;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        
+
         osc.type = oscType;
         if (oscType === "sawtooth") {
           osc.detune.setValueAtTime(Math.random() * 20 - 10, time);
         }
-        
+
         const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
         osc.frequency.setValueAtTime(freq, time);
-        
-        const attack = genre === "Orchestral" ? 0.8 : genre === "Lo-fi" ? 0.15 : 0.03;
+
+        const attack =
+          genre === "Orchestral" ? 0.8 : genre === "Lo-fi" ? 0.15 : 0.03;
         const decay = (speed / 1000) * 0.9;
-        
+
         gain.gain.setValueAtTime(0, time);
         gain.gain.linearRampToValueAtTime(0.08, time + attack);
         gain.gain.exponentialRampToValueAtTime(0.001, time + attack + decay);
-        
+
         osc.connect(gain);
         gain.connect(filter);
-        
+
         osc.start(time);
         osc.stop(time + attack + decay + 0.1);
-        
+
         this.nodes.push(osc);
       });
 
       const drumVol = 0.05;
       if (genre === "Pop" || genre === "Rock" || genre === "Lo-fi") {
         const step = beat % 4;
-        
+
         if (step === 0 || step === 2) {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
@@ -159,47 +162,55 @@ class SynthEngine {
           this.nodes.push(osc);
         } else if (step === 1 || step === 3) {
           const bufferSize = this.ctx.sampleRate * 0.1;
-          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const buffer = this.ctx.createBuffer(
+            1,
+            bufferSize,
+            this.ctx.sampleRate,
+          );
           const data = buffer.getChannelData(0);
           for (let i = 0; i < bufferSize; i++) {
             data[i] = Math.random() * 2 - 1;
           }
           const noise = this.ctx.createBufferSource();
           noise.buffer = buffer;
-          
+
           const noiseFilter = this.ctx.createBiquadFilter();
           noiseFilter.type = "bandpass";
           noiseFilter.frequency.value = 1000;
-          
+
           const gain = this.ctx.createGain();
           gain.gain.setValueAtTime(drumVol, time);
           gain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
-          
+
           noise.connect(noiseFilter);
           noiseFilter.connect(gain);
           gain.connect(this.ctx.destination);
           noise.start(time);
           noise.stop(time + 0.12);
         }
-        
-        if (genre === "Pop" && (beat % 2 === 1)) {
+
+        if (genre === "Pop" && beat % 2 === 1) {
           const bufferSize = this.ctx.sampleRate * 0.03;
-          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const buffer = this.ctx.createBuffer(
+            1,
+            bufferSize,
+            this.ctx.sampleRate,
+          );
           const data = buffer.getChannelData(0);
           for (let i = 0; i < bufferSize; i++) {
             data[i] = Math.random() * 2 - 1;
           }
           const hihat = this.ctx.createBufferSource();
           hihat.buffer = buffer;
-          
+
           const hihatFilter = this.ctx.createBiquadFilter();
           hihatFilter.type = "highpass";
           hihatFilter.frequency.value = 8000;
-          
+
           const gain = this.ctx.createGain();
           gain.gain.setValueAtTime(drumVol * 0.4, time);
           gain.gain.exponentialRampToValueAtTime(0.001, time + 0.03);
-          
+
           hihat.connect(hihatFilter);
           hihatFilter.connect(gain);
           gain.connect(this.ctx.destination);
@@ -212,7 +223,7 @@ class SynthEngine {
       if (this.nodes.length > 50) {
         this.nodes = this.nodes.slice(-30);
       }
-      
+
       this.timer = setTimeout(playLoop, speed);
     };
 
@@ -913,6 +924,7 @@ function ToolWalkthrough({ lesson, onDone }) {
   const [step, setStep] = useState(0);
   const [checkAnswer, setCheckAnswer] = useState(null);
   const [showCheck, setShowCheck] = useState(false);
+  const [stuckAck, setStuckAck] = useState(false);
   const steps = lesson.walkthroughSteps;
   const current = steps[step];
   const ToolMockup = TOOL_UI_KINDS[lesson.tool.uiKind];
@@ -938,6 +950,25 @@ function ToolWalkthrough({ lesson, onDone }) {
       setShowCheck(false);
       setCheckAnswer(null);
     } else onDone();
+  };
+
+  const handleStuck = () => {
+    const event = {
+      event: "step_stuck",
+      lessonDay: lesson.day,
+      stepId: current.id,
+    };
+    console.log(event);
+    try {
+      const existing = JSON.parse(localStorage.getItem("stuckEvents") || "[]");
+      const next = Array.isArray(existing) ? [...existing, event] : [event];
+      localStorage.setItem("stuckEvents", JSON.stringify(next));
+    } catch (error) {
+      console.warn("Could not save stuck event", error);
+    }
+    setStuckAck(true);
+    window.clearTimeout(handleStuck.timeoutId);
+    handleStuck.timeoutId = window.setTimeout(() => setStuckAck(false), 1600);
   };
 
   if (!introDone) {
@@ -978,9 +1009,22 @@ function ToolWalkthrough({ lesson, onDone }) {
       </div>
 
       {current.id !== "loading" && !showCheck && (
-        <NextButton onClick={handleNextStep}>
-          {step < steps.length - 1 ? "Next step" : "Continue"}
-        </NextButton>
+        <>
+          <NextButton onClick={handleNextStep}>
+            {step < steps.length - 1 ? "Next step" : "Continue"}
+          </NextButton>
+          <button
+            className="gsl-btn gsl-btn-ghost gsl-walkthrough-help"
+            onClick={handleStuck}
+          >
+            🙋 I can't find this
+          </button>
+          {stuckAck && (
+            <p className="gsl-fadein gsl-walkthrough-ack">
+              Thanks — let's try together! 💛
+            </p>
+          )}
+        </>
       )}
 
       {showCheck && check && (
@@ -1298,15 +1342,47 @@ function PickerRow({ field, value, onPick }) {
   );
 }
 
-function PromptBuilder({ lesson, onDone }) {
+function PromptBuilder({ lesson, onDone, setBuilderPrompt }) {
   const { fields, buildSentence, previewBars } = lesson.builder;
   const [picks, setPicks] = useState({});
+  const [stepIndex, setStepIndex] = useState(0);
+  const [showRecap, setShowRecap] = useState(false);
   const complete = fields.every((f) => picks[f.id]);
-  const sentence = complete ? buildSentence(picks) : null;
+  const currentField = fields[stepIndex];
+  const previewValues = useMemo(() => {
+    return fields.reduce((acc, field) => {
+      acc[field.id] = picks[field.id] || field.options?.[0] || "";
+      return acc;
+    }, {});
+  }, [fields, picks]);
+  const sentence = complete
+    ? buildSentence(picks)
+    : buildSentence(previewValues);
   const bars = useMemo(
     () => (complete && previewBars ? previewBars(picks) : []),
-    [complete, picks],
+    [complete, picks, previewBars],
   );
+
+  const handlePick = (value) => {
+    const nextPicks = { ...picks, [currentField.id]: value };
+    setPicks(nextPicks);
+    if (stepIndex < fields.length - 1) {
+      setStepIndex((s) => s + 1);
+    } else {
+      setShowRecap(true);
+    }
+  };
+
+  const handleBack = () => {
+    if (stepIndex > 0) setStepIndex((s) => s - 1);
+  };
+
+  const handleContinue = () => {
+    if (complete && setBuilderPrompt) {
+      setBuilderPrompt(sentence);
+    }
+    onDone();
+  };
 
   return (
     <BeatShell
@@ -1314,44 +1390,86 @@ function PromptBuilder({ lesson, onDone }) {
       title={lesson.builder.title || "Now you try — build your own prompt"}
     >
       <MascotNote text={lesson.mascotLines.builder} mood="excited" />
-      <div className="gsl-builder">
-        {fields.map((f) => (
-          <PickerRow
-            key={f.id}
-            field={f}
-            value={picks[f.id]}
-            onPick={(v) => setPicks((p) => ({ ...p, [f.id]: v }))}
-          />
-        ))}
-      </div>
-      <div className="gsl-tape">
-        <div className="gsl-tape-reel" />
-        <div className="gsl-tape-window">
-          {sentence ? (
-            <p className="gsl-fadein" key={sentence}>
-              "{sentence}"
-            </p>
-          ) : (
-            <p className="gsl-sentence-placeholder">
-              {lesson.builder.placeholder || "Pick one option from each row..."}
-            </p>
-          )}
-        </div>
-        <div className="gsl-tape-reel" />
-      </div>
-      {complete && bars.length > 0 && (
-        <div className="gsl-preview-wave-card gsl-fadein">
-          <span className="gsl-reveal-label">Your preview</span>
-          <div className="gsl-mini-wave">
-            {bars.map((h, i) => (
-              <span key={i} style={{ height: h }} />
-            ))}
+
+      {!showRecap && currentField ? (
+        <>
+          <div className="gsl-builder">
+            <PickerRow
+              key={currentField.id}
+              field={currentField}
+              value={picks[currentField.id]}
+              onPick={handlePick}
+            />
           </div>
-        </div>
+          <div className="gsl-builder-nav">
+            {stepIndex > 0 && (
+              <button
+                className="gsl-btn gsl-btn-ghost gsl-builder-nav-btn"
+                onClick={handleBack}
+              >
+                ← Back
+              </button>
+            )}
+            <div className="gsl-step-dots">
+              {fields.map((_, i) => (
+                <span
+                  key={i}
+                  className={`gsl-step-dot ${i === stepIndex ? "active" : ""}`}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="gsl-tape">
+            <div className="gsl-tape-reel" />
+            <div className="gsl-tape-window">
+              {complete ? (
+                <p className="gsl-fadein" key={sentence}>
+                  "{sentence}"
+                </p>
+              ) : (
+                <p className="gsl-sentence-placeholder">
+                  {lesson.builder.placeholder ||
+                    "Pick one option from each row..."}
+                </p>
+              )}
+            </div>
+            <div className="gsl-tape-reel" />
+          </div>
+          <p className="gsl-sentence-preview">
+            {complete ? sentence : `So far: ${sentence}`}
+          </p>
+        </>
+      ) : (
+        <>
+          <div className="gsl-builder-recap gsl-fadein">
+            <p className="gsl-builder-recap-title">Your finished prompt</p>
+            <div className="gsl-builder-recap-card">
+              <p className="gsl-builder-recap-prompt">"{sentence}"</p>
+            </div>
+            {bars.length > 0 && (
+              <div className="gsl-preview-wave-card">
+                <span className="gsl-reveal-label">Your preview</span>
+                <div className="gsl-mini-wave">
+                  {bars.map((h, i) => (
+                    <span key={i} style={{ height: h }} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="gsl-builder-nav">
+            <button
+              className="gsl-btn gsl-btn-ghost gsl-builder-nav-btn"
+              onClick={() => setShowRecap(false)}
+            >
+              ← Change picks
+            </button>
+          </div>
+          <NextButton onClick={handleContinue} disabled={!complete}>
+            {complete ? "Love it! Next" : "Finish all picks"}
+          </NextButton>
+        </>
       )}
-      <NextButton onClick={onDone} disabled={!complete}>
-        {complete ? "Love it! Next" : `Finish all ${fields.length} picks`}
-      </NextButton>
     </BeatShell>
   );
 }
@@ -1391,7 +1509,9 @@ function CartoonScene({ visual, animalEmoji = "🐧" }) {
           <span>🎭 Mood: Brave</span>
           <span>🎸 Genre: Pop</span>
           <span>⏱️ Tempo: Fast</span>
-          <span>{animalEmoji} Hero: {animalEmoji}</span>
+          <span>
+            {animalEmoji} Hero: {animalEmoji}
+          </span>
         </div>
       </div>
     );
@@ -1403,7 +1523,9 @@ function CartoonScene({ visual, animalEmoji = "🐧" }) {
         <div className="gsl-tape-reel" />
       </div>
       <NoteParticles count={6} glyphs={["♪", "♫", "✨", "🎵"]} />
-      <span className="gsl-cartoon-animal gsl-cartoon-animal--dance">{animalEmoji}</span>
+      <span className="gsl-cartoon-animal gsl-cartoon-animal--dance">
+        {animalEmoji}
+      </span>
     </div>
   );
 }
@@ -1433,7 +1555,11 @@ function GeminiCartoon({ lesson, ctx, onDone }) {
   return (
     <BeatShell eyebrow="Beat 2 · Storytime" title={panel.title}>
       <MascotNote
-        text={index === 0 ? lesson.mascotLines?.cartoon : fillTemplate(panel.message, ctx)}
+        text={
+          index === 0
+            ? lesson.mascotLines?.cartoon
+            : fillTemplate(panel.message, ctx)
+        }
         mood={panel.mascotMood || "idle"}
       />
       <motion.div
@@ -1450,7 +1576,10 @@ function GeminiCartoon({ lesson, ctx, onDone }) {
       </p>
       <div className="gsl-step-dots">
         {panels.map((_, i) => (
-          <span key={i} className={`gsl-step-dot ${i === index ? "active" : ""}`} />
+          <span
+            key={i}
+            className={`gsl-step-dot ${i === index ? "active" : ""}`}
+          />
         ))}
       </div>
       <NextButton onClick={advance}>
@@ -1469,18 +1598,23 @@ function GeminiLiveSandbox({ lesson, ctx, onDone }) {
   const ToolMockup = TOOL_UI_KINDS[lesson.tool.uiKind];
   const preset = presets[presetIdx] || presets[0];
 
-  const prompt = preset
-    ? fillTemplate(preset.prompt, ctx)
-    : "";
+  const prompt = preset ? fillTemplate(preset.prompt, ctx) : "";
 
   const tokens = prompt
-    ? prompt.split(/(\b(?:Pop|Lo-fi|Rock|Orchestral|Brave|Mighty|Excited|Sleepy|Silly|Fast|Slow)\b)/).filter(Boolean).map((part) => {
-        const lower = part.toLowerCase();
-        let h = null;
-        if (["brave", "mighty", "excited", "sleepy", "silly"].includes(lower)) h = "mood";
-        else if (["pop", "lo-fi", "rock", "orchestral"].includes(lower)) h = "genre";
-        return { t: part, h };
-      })
+    ? prompt
+        .split(
+          /(\b(?:Pop|Lo-fi|Rock|Orchestral|Brave|Mighty|Excited|Sleepy|Silly|Fast|Slow)\b)/,
+        )
+        .filter(Boolean)
+        .map((part) => {
+          const lower = part.toLowerCase();
+          let h = null;
+          if (["brave", "mighty", "excited", "sleepy", "silly"].includes(lower))
+            h = "mood";
+          else if (["pop", "lo-fi", "rock", "orchestral"].includes(lower))
+            h = "genre";
+          return { t: part, h };
+        })
     : [];
 
   useEffect(() => () => synthEngine.stop(), []);
@@ -1569,7 +1703,9 @@ function GeminiLiveSandbox({ lesson, ctx, onDone }) {
                   key={i}
                   style={{
                     height: h,
-                    animation: playing ? `gslDotBounce 0.8s ease-in-out ${i * 0.08}s infinite` : undefined,
+                    animation: playing
+                      ? `gslDotBounce 0.8s ease-in-out ${i * 0.08}s infinite`
+                      : undefined,
                   }}
                 />
               ))}
@@ -1627,12 +1763,17 @@ function GeminiVideoShowcase({ lesson, onDone }) {
     : 0;
 
   return (
-    <BeatShell eyebrow="Beat 11 · Mini-movie" title={cfg?.title || "Watch Gemini work"}>
+    <BeatShell
+      eyebrow="Beat 11 · Mini-movie"
+      title={cfg?.title || "Watch Gemini work"}
+    >
       <MascotNote text={lesson.mascotLines?.videoShowcase} mood="happy" />
 
       <div className="gsl-video-player">
         <div className="gsl-video-chrome">
-          <span className="gsl-video-rec">{playing ? "● REC" : "▶ PREVIEW"}</span>
+          <span className="gsl-video-rec">
+            {playing ? "● REC" : "▶ PREVIEW"}
+          </span>
           <span className="gsl-video-label">
             {current?.label || "Gemini demo"}
           </span>
@@ -1667,15 +1808,15 @@ function GeminiVideoShowcase({ lesson, onDone }) {
         </div>
 
         <div className="gsl-video-progress">
-          <div className="gsl-video-progress-fill" style={{ width: `${progress}%` }} />
+          <div
+            className="gsl-video-progress-fill"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
 
       {(done || !playing) && (
-        <NextButton
-          onClick={onDone}
-          disabled={playing && !done}
-        >
+        <NextButton onClick={onDone} disabled={playing && !done}>
           {done ? "I saw how it works!" : "Skip for now"}
         </NextButton>
       )}
@@ -1696,8 +1837,28 @@ function MissionBrief({ lesson, onDone }) {
   );
 }
 
-function LaunchGate({ lesson, onDone }) {
+function LaunchGate({ lesson, onDone, builderPrompt }) {
   const [launched, setLaunched] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return undefined;
+    const id = window.setTimeout(() => setCopied(false), 1800);
+    return () => window.clearTimeout(id);
+  }, [copied]);
+
+  const handleCopy = async () => {
+    if (!builderPrompt) return;
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(builderPrompt);
+      }
+      setCopied(true);
+    } catch (error) {
+      console.warn("Could not copy prompt", error);
+    }
+  };
+
   if (launched) {
     return (
       <BeatShell title="Waiting for you...">
@@ -1707,20 +1868,43 @@ function LaunchGate({ lesson, onDone }) {
       </BeatShell>
     );
   }
+
   return (
     <BeatShell
       eyebrow="Beat 11 · Launch"
       title={`Ready to try ${lesson.tool.name}?`}
     >
-      <a
-        className="gsl-btn gsl-btn-launch"
-        href={lesson.tool.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => setLaunched(true)}
-      >
-        Open {lesson.tool.name} ↗
-      </a>
+      <MascotNote
+        text={`You're almost there! Copy this prompt, then let's go make it real in ${lesson.tool.name}.`}
+        mood="excited"
+      />
+      <div className="gsl-launch-card gsl-fadein">
+        <p className="gsl-launch-label">Your prompt</p>
+        <div className="gsl-launch-prompt-box">
+          <p>{builderPrompt || "Build a prompt first to copy it here."}</p>
+        </div>
+        <div className="gsl-launch-actions">
+          <button
+            className="gsl-btn gsl-btn-primary"
+            onClick={handleCopy}
+            disabled={!builderPrompt}
+          >
+            {copied ? "✓ Copied!" : "Copy Prompt"}
+          </button>
+          <a
+            className="gsl-btn gsl-btn-launch"
+            href={lesson.tool.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setLaunched(true)}
+          >
+            Open {lesson.tool.name} ↗
+          </a>
+        </div>
+        <p className="gsl-launch-hint">
+          Step 2: Open the tool and paste the prompt when you're ready.
+        </p>
+      </div>
     </BeatShell>
   );
 }
@@ -1981,6 +2165,7 @@ export default function LessonPlayer({
 }) {
   const BEATS = lesson.beats || DEFAULT_BEATS;
   const [beatIndex, setBeatIndex] = useState(0);
+  const [builderPrompt, setBuilderPrompt] = useState("");
   const beat = BEATS[beatIndex];
   const Beat = BEAT_COMPONENTS[beat];
   const next = () => setBeatIndex((i) => Math.min(i + 1, BEATS.length - 1));
@@ -2243,6 +2428,21 @@ const CSS = `
 .gsl-tape-window { flex:1; min-height:2.6rem; display:flex; align-items:center; justify-content:center; text-align:center; font-weight:var(--fw-semibold); color:white; font-size:var(--fs-sm); }
 .gsl-sentence-placeholder { color:color-mix(in srgb, var(--lesson-aqua) 70%, white); font-size:var(--fs-sm); font-style:italic; font-weight:var(--fw-semibold); }
 .gsl-preview-wave-card { display:flex; flex-direction:column; align-items:center; gap:0.5rem; background:var(--color-bg-card); border-radius:var(--radius-lg); padding:1rem 1.5rem; box-shadow:var(--shadow-card); }
+.gsl-sentence-preview { font-size:var(--fs-xs); color:var(--color-text-secondary); max-width:420px; margin:0; }
+.gsl-builder-nav { display:flex; gap:0.7rem; align-items:center; justify-content:center; flex-wrap:wrap; }
+.gsl-builder-nav-btn { padding:0.55rem 1rem; }
+.gsl-builder-recap { display:flex; flex-direction:column; align-items:center; gap:0.8rem; width:100%; max-width:460px; }
+.gsl-builder-recap-title { font-weight:var(--fw-semibold); color:var(--lesson-color); margin:0; }
+.gsl-builder-recap-card { width:100%; background:linear-gradient(135deg, var(--color-bg-card), color-mix(in srgb, var(--lesson-purple) 10%, var(--color-bg-card))); border:1.5px solid color-mix(in srgb, var(--lesson-color) 28%, var(--color-border)); border-radius:var(--radius-lg); padding:1rem 1.2rem; box-shadow:var(--shadow-card); }
+.gsl-builder-recap-prompt { margin:0; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:var(--fs-sm); line-height:1.6; color:var(--lesson-ink); }
+.gsl-launch-card { display:flex; flex-direction:column; align-items:center; gap:0.85rem; width:100%; max-width:480px; }
+.gsl-launch-label { font-size:var(--fs-xs); font-weight:var(--fw-semibold); text-transform:uppercase; letter-spacing:0.08em; color:var(--lesson-color); margin:0; }
+.gsl-launch-prompt-box { width:100%; background:linear-gradient(135deg, var(--lesson-ink), color-mix(in srgb, var(--lesson-purple) 70%, var(--lesson-ink))); color:white; border-radius:var(--radius-lg); padding:1rem 1.2rem; box-shadow:var(--shadow-card); }
+.gsl-launch-prompt-box p { margin:0; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:var(--fs-sm); line-height:1.5; }
+.gsl-launch-actions { display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:center; }
+.gsl-launch-hint { font-size:var(--fs-xs); color:var(--color-text-secondary); margin:0; }
+.gsl-walkthrough-help { padding:0.6rem 1rem; }
+.gsl-walkthrough-ack { font-size:var(--fs-xs); color:var(--lesson-color); font-weight:var(--fw-semibold); margin:0; }
 .gsl-mission-card { background:linear-gradient(160deg, var(--color-bg-card), color-mix(in srgb, var(--lesson-purple) 8%, var(--color-bg-card))); border-radius:var(--radius-xl); padding:2rem; box-shadow:var(--shadow-glow); max-width:420px; display:flex; flex-direction:column; gap:1rem; border-top:4px solid var(--lesson-color); }
 .gsl-mission-reward { font-weight:var(--fw-semibold); color:var(--lesson-color); }
 .gsl-waiting-pulse { width:60px; height:60px; border-radius:50%; background:var(--lesson-color); animation:gslPulse 2s ease-in-out infinite; }
